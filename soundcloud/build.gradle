@@ -1,0 +1,12 @@
+dependencies {
+    compile project(':downloader_core')
+}
+task copyOutput(type: Copy) {
+    outputs.upToDateWhen { false }
+    into "${rootDir}\\build\\libs"
+    from "${projectDir}\\build\\libs"
+}
+build.dependsOn copyOutput
+rootProject.tasks.build.dependsOn build
+
+apply plugin: 'scala'

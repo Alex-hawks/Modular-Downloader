@@ -1,0 +1,3 @@
+[submodule "loader_core"]
+	path = loader_core
+	url = git@github.com:Alex-hawks/Loader-Core.git

@@ -1,0 +1,14 @@
+dependencies {
+    compile project(':loader_core')
+    compile "org.scala-lang.modules:scala-swing_2.12:2.0.0-M2"
+}
+
+task copyOutput(type: Copy) {
+	outputs.upToDateWhen { false }
+	into "${rootDir}\\build\\classes"
+	from "${projectDir}\\build\\classes"
+}
+build.dependsOn copyOutput
+rootProject.tasks.classes.dependsOn build
+
+apply plugin: 'scala'
