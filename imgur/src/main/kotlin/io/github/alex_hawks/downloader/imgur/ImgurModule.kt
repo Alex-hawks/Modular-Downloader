@@ -4,6 +4,11 @@ import io.github.alex_hawks.downloader.api.DownloaderRegistry
 import io.github.alex_hawks.downloader.api.Module
 import io.github.alex_hawks.downloader.api.RemoteTarget
 import io.github.alex_hawks.downloader.api.RemoteTargetList
+import io.github.alex_hawks.downloader.core.ProgressBarInterface
+import io.github.alex_hawks.downloader.core.ThreadDownload
+import io.github.alex_hawks.downloader.imgur.data.Dummy
+import io.github.alex_hawks.downloader.lib.JsonParser
+import io.github.alex_hawks.downloader.lib.ScalaUtils
 import io.github.alex_hawks.loader.api.Core
 import io.github.alex_hawks.loader.api.Load
 import scala.swing.GridPanel
@@ -14,11 +19,15 @@ import java.net.URI
 object ImgurModule : Module {
 
     override fun getDownloaders(targetFolder: File, grid: GridPanel, view: ListView<RemoteTarget>): Array<Runnable> {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val selections = ScalaUtils.getSelections(view)
+        val run = selections.map { r -> ThreadDownload(r.uri, File(targetFolder, r.nameWithExtension), ProgressBarInterface(r.name, grid)) }
+        return run.toTypedArray()
     }
 
     override fun getFilesFromURI(uri: String): RemoteTargetList {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        BaseNames.trim(uri)
+        val tmpstr = BaseNames.trim(uri)
+        return JsonParser.parse(Logic.getJson(tmpstr), ScalaUtils.getClassTag(Dummy::class.java))
     }
 
     override fun matches(uri: String): Boolean {

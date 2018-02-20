@@ -38,9 +38,21 @@ class User extends RemoteTargetList {
 
   override def filter(list: ListView[RemoteTarget], filter: String): Unit = {
     val ls = new ListBuffer[RemoteTarget]
-    for (track <- ls if (track.isDownloadable && ("".equals(filter) || track.getName.toLowerCase(root).contains(filter.toLowerCase(root))))) {
+    for (track <- songs if (track.isDownloadable && ("".equals(filter) || track.getName.toLowerCase(root).contains(filter.toLowerCase(root))))) {
+      ls += track
+    }
+    for (track <- likes if (track.isDownloadable && ("".equals(filter) || track.getName.toLowerCase(root).contains(filter.toLowerCase(root))))) {
       ls += track
     }
     list.listData = ls
+  }
+
+  def print: Unit = {
+    for(track <- songs) {
+      track.print
+    }
+    for(track <- likes) {
+      track.print
+    }
   }
 }

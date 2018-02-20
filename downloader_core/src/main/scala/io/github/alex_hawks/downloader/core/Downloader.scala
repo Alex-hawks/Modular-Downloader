@@ -12,29 +12,29 @@ object Downloader extends SimpleSwingApplication {
   var downloadMeters : Frame = _
 
   lazy val txtUrl = new TextField {
-    columns = 51;
-    tooltip = "Enter the URL to download here";
+    columns = 51
+    tooltip = "Enter the URL to download here"
   }
   lazy val txtFile = new TextField {
-    columns = 50;
-    tooltip = "The path to where the files will be downloaded to";
+    columns = 50
+    tooltip = "The path to where the files will be downloaded to"
   }
   lazy val txtFilter = new TextField {
-    columns = 59;
-    preferredSize = new Dimension(658, 20);
-    tooltip = "Filter the list of files";
+    columns = 59
+    preferredSize = new Dimension(658, 20)
+    tooltip = "Filter the list of files"
   }
   lazy val btnRefresh = new Button {
-    text = "Refresh!";
-    borderPainted = true;
-    enabled = true;
-    tooltip = "Click to validate the URL";
+    text = "Refresh!"
+    borderPainted = true
+    enabled = true
+    tooltip = "Click to validate the URL"
   }
   lazy val btnDownload = new Button {
-    text = "Download!";
-    borderPainted = true;
-    enabled = true;
-    tooltip = "Download everything that was found";
+    text = "Download!"
+    borderPainted = true
+    enabled = true
+    tooltip = "Download everything that was found"
   }
   lazy val count = new Label {
     text = "None found, yet."
@@ -42,15 +42,15 @@ object Downloader extends SimpleSwingApplication {
   lazy val list : ListView[RemoteTarget] = new ListView[RemoteTarget]
 
   override lazy val top: Frame = new MainFrame {
-    title = "Alex's Modular Downloader";
-    preferredSize = new Dimension(700, 400);
-    resizable = false
+    title = "Alex's Modular Downloader"
+    preferredSize = new Dimension(700, 500)
+    resizable = true
 
     contents = new FlowPanel {
       contents += new FlowPanel {
-        contents += txtUrl;
+        contents += txtUrl
         contents += Swing.HStrut(5)
-        contents += btnRefresh;
+        contents += btnRefresh
       }
       contents += new FlowPanel {
         contents += txtFile
@@ -66,7 +66,7 @@ object Downloader extends SimpleSwingApplication {
       contents += new ScrollPane {
         contents = list
 
-        preferredSize = new Dimension(658, 245);
+        preferredSize = new Dimension(658, 245)
       }
     }
   }
@@ -76,11 +76,11 @@ object Downloader extends SimpleSwingApplication {
   listenTo(txtFilter)
 
   reactions += {
-    case ButtonClicked(component) if (component == btnRefresh) =>
+    case ButtonClicked(component) if component == btnRefresh =>
       refresh
-    case ButtonClicked(component) if (component == btnDownload) =>
+    case ButtonClicked(component) if component == btnDownload =>
       download
-    case KeyReleased(component, _, _, _) if (component == txtFilter) =>
+    case KeyReleased(component, _, _, _) if component == txtFilter =>
       filter
   }
 
@@ -89,8 +89,9 @@ object Downloader extends SimpleSwingApplication {
       prepThread = new Thread {
         override def run = {
           cache = reg.getRemoteTargets(txtUrl.text)
+          cache.print
           cache.filter(list, txtFilter.text)
-          prepThread = null;
+          prepThread = null
         }
       }
       prepThread.start
@@ -98,5 +99,5 @@ object Downloader extends SimpleSwingApplication {
   }
   def download = Registry.download
 
-  def filter = ???
+  def filter = if (cache != null) cache.filter(list, txtFilter.text)
 }

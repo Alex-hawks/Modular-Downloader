@@ -1,19 +1,20 @@
 package io.github.alex_hawks.downloader.fallback;
 
-import io.github.alex_hawks.downloader.api.Module;
-import io.github.alex_hawks.downloader.api.RemoteTarget;
-import io.github.alex_hawks.downloader.api.RemoteTargetList;
-import io.github.alex_hawks.downloader.core.Registry;
-import org.jetbrains.annotations.NotNull;
-import scala.collection.mutable.ListBuffer;
-import scala.swing.ListView;
-
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+
+import io.github.alex_hawks.downloader.api.Module;
+import io.github.alex_hawks.downloader.api.RemoteTarget;
+import io.github.alex_hawks.downloader.api.RemoteTargetList;
+import io.github.alex_hawks.downloader.core.Registry;
+import scala.collection.mutable.ListBuffer;
+import scala.swing.ListView;
 
 public class FRemoteTargetList implements RemoteTargetList
 {
@@ -101,5 +102,10 @@ public class FRemoteTargetList implements RemoteTargetList
         final ListBuffer<RemoteTarget> ls = new ListBuffer<>();
         ls.$plus$eq(target);
         list.listData_$eq(ls);
+    }
+  
+    @Override public void print()
+    {
+        System.out.println(target.getName());
     }
 }

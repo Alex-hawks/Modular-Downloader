@@ -30,24 +30,24 @@ object Logic {
     conn.disconnect()
 
     if (url3.startsWith(userUrl)) {
-      val user: User = JsonParser.parse[User](url3)
-      var page: TrackList = JsonParser.parse[TrackList](Queries.userTracksUrl.replace("{userID}", user.id.toString).replace("{ClientID}", clientID))
+      val user: User = JsonParser.parseURL[User](url3)
+      var page: TrackList = JsonParser.parseURL[TrackList](Queries.userTracksUrl.replace("{userID}", user.id.toString).replace("{ClientID}", clientID))
       page.getList().foreach(user.songs += _)
       var hasNext = page.next_href != null && !page.next_href.equals("")
 
       while (hasNext) {
-        page = JsonParser.parse[TrackList](page.next_href)
+        page = JsonParser.parseURL[TrackList](page.next_href)
         page.getList().foreach{user.songs += _}
         println("Done a page of user's own content")
         hasNext = page.next_href != null && !page.next_href.equals("")
       }
       println(s"Found ${user.songs.size} songs")
 
-      page = JsonParser.parse[TrackList](Queries.userLikesUrl.replace("{userID}", user.id.toString).replace("{ClientID}", clientID))
+      page = JsonParser.parseURL[TrackList](Queries.userLikesUrl.replace("{userID}", user.id.toString).replace("{ClientID}", clientID))
       page.getList().foreach{user.likes += _}
 
       while (hasNext) {
-        page = JsonParser.parse[TrackList](page.next_href)
+        page = JsonParser.parseURL[TrackList](page.next_href)
         page.getList().foreach{user.likes += _}
         println("Done a page of likes")
       }
@@ -55,14 +55,14 @@ object Logic {
       return user
     } else if (url3.startsWith(playlistsUrl)) {
       println(url3)
-      return JsonParser.parse[Set](url3)
+      return JsonParser.parseURL[Set](url3)
     } else if (url3.startsWith(trackUrl)) {
-      return JsonParser.parse[Track](url3)
+      return JsonParser.parseURL[Track](url3)
     } else if (url3.startsWith(groupUrl)) {
-      val group: Group = JsonParser.parse[Group](url3)
+      val group: Group = JsonParser.parseURL[Group](url3)
 
       System.out.println(Queries.groupTracksUrl.replace("{groupID}", group.id.toString).replace("{ClientID}", clientID))
-      JsonParser.parse[Array[Track]](Queries.groupTracksUrl.replace("{groupID}", group.id.toString).replace("{ClientID}", clientID)).foreach(group.tracks += _)
+      JsonParser.parseURL[Array[Track]](Queries.groupTracksUrl.replace("{groupID}", group.id.toString).replace("{ClientID}", clientID)).foreach(group.tracks += _)
       return group
     }
 

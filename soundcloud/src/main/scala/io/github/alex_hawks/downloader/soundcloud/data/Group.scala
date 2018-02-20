@@ -35,4 +35,10 @@ class Group extends RemoteTargetList {
     }
     list.listData = ls
   }
+
+  def print: Unit = {
+    for(track <- tracks) {
+      track.print
+    }
+  }
 }

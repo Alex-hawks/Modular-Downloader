@@ -30,7 +30,7 @@ class Track extends RemoteTarget with RemoteTargetList {
 
   override def isDownloadable: Boolean = downloadable
 
-  override def getNameWithExtension: String = s"${title.sanitizeFilename}.${original_format}"
+  override def getNameWithExtension: String = s"${title.sanitizeFilename()}.$original_format"
 
   override def getList: util.List[RemoteTarget] = {
     val ls = new util.ArrayList[RemoteTarget]
@@ -45,4 +45,6 @@ class Track extends RemoteTarget with RemoteTargetList {
     ls += this
     list.listData = ls
   }
+
+  override def print(): Unit = println(downloadable + ": " + title)
 }

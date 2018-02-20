@@ -8,10 +8,15 @@ import scala.reflect.ClassTag
 object JsonParser {
   val gson : Gson = new Gson
 
-  def parse[A : ClassTag](url : String) : A = {
+  def parseURL[A : ClassTag](url : String) : A = {
     val aClass = implicitly[ClassTag[A]].runtimeClass
 
     val json : String = Source.fromURL(url)("UTF-8").mkString
+    return gson.fromJson(json, aClass).asInstanceOf[A]
+  }
+
+  def parse[A : ClassTag](json : String) : A = {
+    val aClass = implicitly[ClassTag[A]].runtimeClass
     return gson.fromJson(json, aClass).asInstanceOf[A]
   }
 }

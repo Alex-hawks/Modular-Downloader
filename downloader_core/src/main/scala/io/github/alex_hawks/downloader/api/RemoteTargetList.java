@@ -1,8 +1,8 @@
 package io.github.alex_hawks.downloader.api;
 
-import scala.swing.ListView;
-
 import java.util.List;
+
+import scala.swing.ListView;
 
 public interface RemoteTargetList
 {
@@ -11,4 +11,6 @@ public interface RemoteTargetList
     Module getModule();
     
     void filter(ListView<RemoteTarget> list, String filter);
+    
+    void print();
 }

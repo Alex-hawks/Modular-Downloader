@@ -1,12 +1,13 @@
 package io.github.alex_hawks.downloader.core.Empty;
 
-import io.github.alex_hawks.downloader.api.Module;
-import io.github.alex_hawks.downloader.api.RemoteTarget;
-import org.jetbrains.annotations.NotNull;
-import scala.swing.ListView;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+
+import io.github.alex_hawks.downloader.api.Module;
+import io.github.alex_hawks.downloader.api.RemoteTarget;
+import scala.swing.ListView;
 
 public class ERemoteTargetList implements io.github.alex_hawks.downloader.api.RemoteTargetList
 {
@@ -32,5 +33,9 @@ public class ERemoteTargetList implements io.github.alex_hawks.downloader.api.Re
     public void filter(@NotNull ListView<RemoteTarget> list, @NotNull String filter)
     {
         
+    }
+  
+    @Override public void print() {
+    
     }
 }

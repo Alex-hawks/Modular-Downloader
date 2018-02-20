@@ -32,4 +32,10 @@ class Set extends RemoteTargetList {
     }
     list.listData = ls
   }
+
+  def print: Unit = {
+    for(track <- tracks) {
+      track.print
+    }
+  }
 }

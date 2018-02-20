@@ -8,7 +8,8 @@ import io.github.alex_hawks.downloader.fallback.FallbackModule
 import io.github.alex_hawks.loader.core.Loader
 
 import scala.collection.mutable
-import scala.swing.{Frame, GridPanel}
+import scala.swing.event.ButtonClicked
+import scala.swing.{Button, Dimension, FlowPanel, Frame, GridPanel, Label, ScrollPane, Swing}
 
 object Registry extends DownloaderRegistry {
   lazy val modules: mutable.Set[Module] = mutable.Set[Module]()
@@ -30,8 +31,18 @@ object Registry extends DownloaderRegistry {
   def getRemoteTargets(uri: String): RemoteTargetList = checkModules(uri).getFilesFromURI(uri)
 
   def download(): Unit = {
-    if (Downloader.list.selection.items.isEmpty && Downloader.list.listData.size != 1) // selection is empty
-      return
+    if (Downloader.list.listData.size == 0) { // No options available
+      showError("Nothing downloadable has been found. Please search again.")
+      return // TODO: make this show an error dialogue box
+    }
+    if (Downloader.list.selection.items.isEmpty && Downloader.list.listData.size != 1) { // selection is empty. this fact is ignored if there is only one option
+      showError("Nothing has been selected to download. Please make some selections in the list")
+      return // TODO: make this show an error dialogue box
+    }
+    if(Downloader.txtFile.text.trim.isEmpty) { //Folder box is empty
+      showError("No folder to download to has been entered. Please enter a folder to download to")
+      return // TODO: make this show an error dialogue box
+    }
     do_
   }
 
@@ -39,7 +50,9 @@ object Registry extends DownloaderRegistry {
     val grid = new GridPanel(Downloader.list.selection.items.length, 2)
     Downloader.downloadMeters = new Frame {
       title = "Modular Downloads"
-      contents = grid
+      contents = new ScrollPane {
+        contents = grid
+      }
       visible = true
     }
 
@@ -50,6 +63,29 @@ object Registry extends DownloaderRegistry {
     for (x <- runnables) executor.submit(x)
 
     Downloader.downloadMeters.pack
+  }
+
+  private def showError(msg: String): Frame = {
+    new Frame {
+      title = Downloader.top.title
+      preferredSize = new Dimension(400, 200)
+      resizable = false
+
+      contents = new FlowPanel {
+        contents += new Label {
+          text = msg
+        }
+        contents += new FlowPanel {
+          contents += new Button {
+            text = "Ok"
+            borderPainted = true
+            enabled = true
+            reactions += { case ButtonClicked(_) => close }
+          }
+        }
+        visible = true
+      }
+    }
   }
 
   override def addModule(module: Module): Unit = modules += module
